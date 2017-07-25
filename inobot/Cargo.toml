@@ -1,0 +1,6 @@
+[package]
+name = "inobot"
+version = "0.1.0"
+authors = ["kuznetsovin <kuznetsovin@gmail.com>"]
+
+[dependencies]
