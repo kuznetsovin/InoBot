@@ -57,3 +57,4 @@ Cargo.lock
 
 inobot/target/
 inobot/Cargo.lock
+config.toml
