@@ -1,7 +1,9 @@
 #[macro_use]
 extern crate serde_derive;
+extern crate curl;
 
-mod config;
+pub mod config;
+mod inoreader;
 
 fn main() {
     // получаем список аргументов командной строки
@@ -9,5 +11,8 @@ fn main() {
 
     let cfg = config::Config::new(&cmd_args[1]);
 
-    println!("\ninoreader: {}\ntelegram: {}", cfg.inoreader_token, cfg.get_telegram_token())
+    let mut inoreader_client = inoreader::InoReaderClient::new(&cfg);
+
+    inoreader_client.get_user_info();
+    inoreader_client.get_subscribe_list();
 }

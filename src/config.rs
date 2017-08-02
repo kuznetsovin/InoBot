@@ -6,7 +6,10 @@ use std::path::Path;
 
 #[derive(Deserialize)]
 pub struct Config {
+    pub inoreader_appkey: String,
+    pub inoreader_appid: String,
     pub inoreader_token: String,
+    pub inoreader_endpoint: String,
     telegram_token: String
 }
 
