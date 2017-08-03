@@ -6,6 +6,7 @@ pub struct InoReaderClient<'a> {
     app_id: &'a String,
     app_key: &'a String,
     app_token: &'a String,
+    endpoint: &'a String
 }
 
 impl<'a> InoReaderClient<'a> {
@@ -15,26 +16,20 @@ impl<'a> InoReaderClient<'a> {
             app_id: &conf.inoreader_appid,
             app_token: &conf.inoreader_token,
             app_key: &conf.inoreader_appkey,
+            endpoint: &conf.inoreader_endpoint
         };
         client.set_headers();
         client
     }
 
     pub fn get_user_info(&mut self) {
-        let api_endpoint = "https://www.inoreader.com/reader/api/0/user-info";
-
-        &self.client.url(api_endpoint).unwrap();
-        &self.client.perform().unwrap();
-
-        println!("{}", &self.client.response_code().unwrap());
+        let api_endpoint = self.get("/user-info");
+        println!("{}", api_endpoint);
     }
 
     pub fn get_subscribe_list(&mut self) {
-        let api_endpoint = "https://www.inoreader.com/reader/api/0/subscription/list";
-        &self.client.url(api_endpoint).unwrap();
-        &self.client.perform().unwrap();
-
-        println!("{}", &self.client.response_code().unwrap());
+        let api_endpoint = self.get("/subscription/list");
+        println!("{}", api_endpoint);
     }
 
     fn set_headers(&mut self) {
@@ -53,5 +48,25 @@ impl<'a> InoReaderClient<'a> {
         header_list.append(&app_token).unwrap();
 
         &self.client.http_headers(header_list).unwrap();
+    }
+
+    fn get(&mut self, endpoint: &'a str) -> String {
+        let mut ep = self.endpoint.to_owned();
+        let mut dst = Vec::new();
+
+        ep.push_str(endpoint);
+        &self.client.url(&ep).unwrap();
+
+        // вынесено в для освобождения заимствования после получения ответа
+        {
+            let mut transfer = &mut self.client.transfer();
+            transfer.write_function(|data| {
+                dst.extend_from_slice(data);
+                Ok(data.len())
+            }).unwrap();
+            transfer.perform().unwrap();
+        }
+        println!("{}", &self.client.response_code().unwrap());
+        String::from_utf8(dst).unwrap()
     }
 }
