@@ -23,12 +23,12 @@ impl<'a> InoReaderClient<'a> {
     }
 
     pub fn get_user_info(&mut self) {
-        let api_endpoint = self.get("/user-info");
+        let api_endpoint = self.get("/user-info").unwrap();
         println!("{}", api_endpoint);
     }
 
     pub fn get_subscribe_list(&mut self) {
-        let api_endpoint = self.get("/subscription/list");
+        let api_endpoint = self.get("/subscription/list").unwrap();
         println!("{}", api_endpoint);
     }
 
@@ -50,7 +50,7 @@ impl<'a> InoReaderClient<'a> {
         &self.client.http_headers(header_list).unwrap();
     }
 
-    fn get(&mut self, endpoint: &'a str) -> String {
+    fn get(&mut self, endpoint: &'a str) -> Result<String, u32> {
         let mut ep = self.endpoint.to_owned();
         let mut dst = Vec::new();
 
@@ -66,7 +66,11 @@ impl<'a> InoReaderClient<'a> {
             }).unwrap();
             transfer.perform().unwrap();
         }
-        println!("{}", &self.client.response_code().unwrap());
-        String::from_utf8(dst).unwrap()
+
+        let response_code = self.client.response_code().unwrap();
+        match response_code {
+            200 => Ok(String::from_utf8(dst).unwrap()),
+            _ => Err(response_code),
+        }
     }
 }
