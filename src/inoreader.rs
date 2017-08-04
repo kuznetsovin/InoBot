@@ -1,5 +1,14 @@
+extern crate serde_json;
+
+use self::serde_json::Value;
 use curl::easy::{Easy, List};
+use std::str::FromStr;
 use config::Config;
+
+pub struct News {
+    pub title: String,
+    pub url: String
+}
 
 pub struct InoReaderClient<'a> {
     client: Easy,
@@ -22,14 +31,32 @@ impl<'a> InoReaderClient<'a> {
         client
     }
 
-    pub fn get_user_info(&mut self) {
-        let api_endpoint = self.get("/user-info").unwrap();
-        println!("{}", api_endpoint);
+    pub fn get_unread_count(&mut self) -> u64 {
+        let response = self.get("/unread-count").unwrap();
+        let v: Value = serde_json::from_str(&response).unwrap();
+
+        v["unreadcounts"][0]["count"].as_u64().unwrap()
     }
 
-    pub fn get_subscribe_list(&mut self) {
-        let api_endpoint = self.get("/subscription/list").unwrap();
-        println!("{}", api_endpoint);
+    pub fn get_last_news(&mut self, count: u64) -> Vec<News>{
+        //        let endpoint = format!("/stream/contents/?n={}", count);
+        let endpoint = "/stream/contents/?n=25";
+
+        let response = self.get(&endpoint).unwrap();
+        let r: Value = serde_json::from_str(&response).unwrap();
+
+        let items = r["items"].as_array().unwrap();
+
+        let mut news = Vec::new();
+        for i in items {
+            news.push(
+                News {
+                    title: String::from_str(i["title"].as_str().unwrap()).unwrap(),
+                    url: String::from_str(i["canonical"][0]["href"].as_str().unwrap()).unwrap(),
+                }
+            );
+        };
+        news
     }
 
     fn set_headers(&mut self) {

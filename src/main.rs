@@ -13,6 +13,10 @@ fn main() {
 
     let mut inoreader_client = inoreader::InoReaderClient::new(&cfg);
 
-    inoreader_client.get_user_info();
-    inoreader_client.get_subscribe_list();
+    let unread_count = inoreader_client.get_unread_count();
+    let news: Vec<inoreader::News> = inoreader_client.get_last_news(unread_count);
+
+    for n in news {
+        println!("{} ({})", n.title, n.url);
+    }
 }
