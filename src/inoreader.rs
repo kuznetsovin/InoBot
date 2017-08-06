@@ -38,11 +38,10 @@ impl<'a> InoReaderClient<'a> {
         v["unreadcounts"][0]["count"].as_u64().unwrap()
     }
 
-    pub fn get_last_news(&mut self, count: u64) -> Vec<News>{
-        //        let endpoint = format!("/stream/contents/?n={}", count);
-        let endpoint = "/stream/contents/?n=25";
+    pub fn get_last_news(&mut self, count: u64) -> Vec<News> {
+        let ep = format!("/stream/contents/?n={}", count);
 
-        let response = self.get(&endpoint).unwrap();
+        let response = self.get(&ep).unwrap();
         let r: Value = serde_json::from_str(&response).unwrap();
 
         let items = r["items"].as_array().unwrap();
@@ -77,7 +76,7 @@ impl<'a> InoReaderClient<'a> {
         &self.client.http_headers(header_list).unwrap();
     }
 
-    fn get(&mut self, endpoint: &'a str) -> Result<String, u32> {
+    fn get(&mut self, endpoint: &str) -> Result<String, u32> {
         let mut ep = self.endpoint.to_owned();
         let mut dst = Vec::new();
 
