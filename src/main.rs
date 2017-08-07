@@ -4,6 +4,7 @@ extern crate curl;
 
 pub mod config;
 mod inoreader;
+mod telegram;
 
 fn main() {
     // получаем список аргументов командной строки
@@ -12,6 +13,7 @@ fn main() {
     let cfg = config::Config::new(&cmd_args[1]);
 
     let mut inoreader_client = inoreader::InoReaderClient::new(&cfg);
+    let mut telegram_bot = telegram::TelegramBotClient::new(&cfg);
 
     let unread_count = inoreader_client.get_unread_count();
     let news: Vec<inoreader::News> = inoreader_client.get_last_news(unread_count);
@@ -19,4 +21,6 @@ fn main() {
     for n in news {
         println!("{} ({})", n.title, n.url);
     }
+
+    println!("{}", telegram_bot.get_me());
 }

@@ -10,7 +10,8 @@ pub struct Config {
     pub inoreader_appid: String,
     pub inoreader_token: String,
     pub inoreader_endpoint: String,
-    telegram_token: String
+    telegram_token: String,
+    telegram_endpoint: String,
 }
 
 impl Config {
@@ -28,8 +29,11 @@ impl Config {
         toml::from_str(&content.to_string()).unwrap()
     }
 
-    // сделано для примера получения доступа к private полю структуры
-    pub fn get_telegram_token(&self) -> &String {
-        &self.telegram_token
+    pub fn get_telegram_bot_endpoint(&self) -> String {
+        let mut main_ep = self.telegram_endpoint.to_owned();
+        let bot_ep = format!("/bot{}", &self.telegram_token);
+
+        main_ep.push_str(&bot_ep);
+        main_ep
     }
 }
