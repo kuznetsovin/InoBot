@@ -23,4 +23,8 @@ fn main() {
     }
 
     println!("{}", telegram_bot.get_me());
+    let chats = telegram_bot.get_chart_ids();
+    for c in chats {
+        println!("id: {}", c);
+    }
 }
