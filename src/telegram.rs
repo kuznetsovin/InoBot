@@ -45,7 +45,10 @@ impl TelegramBotClient {
             chat_id,
             news.to_markdown(),
         );
-        self.get(&msg_url).unwrap();
+        match self.get(&msg_url) {
+            Ok(s) => println!("News success send"),
+            Err(e) => println!("Can't send news"),
+        };
     }
 
     fn get(&mut self, endpoint: &str) -> Result<Value, String> {
@@ -73,13 +76,12 @@ impl TelegramBotClient {
 
     fn parse_response(&self, response: Vec<u8>) -> Value {
         let resp = String::from_utf8(response).unwrap();
-        println!("{}", resp);
-        serde_json::from_str(&resp).unwrap()
+        serde_json::from_str(&resp).unwrap_or_default()
     }
 
     fn get_error_msg(&self, response: Vec<u8>) -> String {
         let resp = &self.parse_response(response);
-        String::from_str(resp["description"].as_str().unwrap()).unwrap()
+        String::from_str(resp["description"].as_str().unwrap_or_default()).unwrap_or_default()
     }
 }
 
