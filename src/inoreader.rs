@@ -6,8 +6,18 @@ use std::str::FromStr;
 use config::Config;
 
 pub struct News {
-    pub title: String,
-    pub url: String
+    title: String,
+    url: String
+}
+
+impl News {
+    pub fn to_markdown(&self) -> String {
+        format!(
+            "[{}]({})",
+            &self.title.replace("[", "(").replace("]", ")"),
+            &self.url
+        )
+    }
 }
 
 pub struct InoReaderClient<'a> {
