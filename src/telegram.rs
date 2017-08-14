@@ -19,21 +19,17 @@ impl TelegramBotClient {
         }
     }
 
-    //    pub fn get_me(&mut self) -> Value {
-    //         self.get("/getMe").unwrap()
-    //    }
-
-    pub fn get_chart_ids(&mut self) -> Vec<u64> {
+    pub fn get_chart_ids(&mut self) -> Vec<i64> {
         // getUpdates получает все сообщения которые были отправлены боту на текущий момент
         let response = self.get("/getUpdates").unwrap();
 
         // из этих сообщений получем id чатов для рассылки
         let messages = response["result"].as_array().unwrap();
 
-        let mut chart_ids = Vec::new();
+        let mut chart_ids: Vec<i64> = Vec::new();
         for m in messages {
             chart_ids.push(
-                m["message"]["chat"]["id"].as_u64().unwrap()
+                m["message"]["chat"]["id"].as_i64().unwrap()
             )
         }
         chart_ids

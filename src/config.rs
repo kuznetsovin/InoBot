@@ -12,6 +12,7 @@ pub struct Config {
     pub inoreader_endpoint: String,
     telegram_token: String,
     telegram_endpoint: String,
+    pub db_path: String,
 }
 
 impl Config {

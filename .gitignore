@@ -60,3 +60,4 @@ inobot/Cargo.lock
 config.toml
 .idea
 .idea/
+inobot.db
