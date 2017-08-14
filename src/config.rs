@@ -13,6 +13,7 @@ pub struct Config {
     telegram_token: String,
     telegram_endpoint: String,
     pub db_path: String,
+    pub timeout: u64,
 }
 
 impl Config {

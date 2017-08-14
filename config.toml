@@ -5,3 +5,4 @@ inoreader_endpoint = "https://www.inoreader.com/reader/api/0"
 telegram_token = "370867755:AAGi_Jc4YqFcUButlhRk8JwqofmLOJrKP-4"
 telegram_endpoint = "https://api.telegram.org"
 db_path = "/Users/kuznetsovin/Projects/InoBot/inobot.db"
+timeout = 60
