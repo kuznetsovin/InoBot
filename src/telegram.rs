@@ -42,8 +42,8 @@ impl TelegramBotClient {
             news.to_markdown(),
         );
         match self.get(&msg_url) {
-            Ok(s) => println!("News success send"),
-            Err(e) => println!("Can't send news"),
+            Ok(_) => println!("News success send"),
+            Err(e) => println!("Can't send news: {:?}", e),
         };
     }
 
