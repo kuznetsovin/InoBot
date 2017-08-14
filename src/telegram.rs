@@ -80,4 +80,3 @@ impl TelegramBotClient {
         String::from_str(resp["description"].as_str().unwrap_or_default()).unwrap_or_default()
     }
 }
-

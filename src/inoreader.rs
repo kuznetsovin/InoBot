@@ -5,6 +5,7 @@ use curl::easy::{Easy, List};
 use std::str::FromStr;
 use config::Config;
 
+#[derive(Clone)]
 pub struct News {
     title: String,
     url: String

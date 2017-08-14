@@ -35,17 +35,11 @@ fn main() {
         let unread_count = inoreader_client.get_unread_count();
         let news: Vec<inoreader::News> = inoreader_client.get_last_news(unread_count);
 
-        //    for c in saved_charts {
-        //        thread::spawn(move || {
-        //            for n in news {
-        //                telegram_bot.send_message(n, c);
-        //            }
-        //        }).join();
-        //    }
-
-        //отправка сделана для одного чата так, как трейдинг не заработал
-        for n in news {
-            telegram_bot.send_message(n, saved_charts[0]);
+        for c in saved_charts {
+            for n in news.clone() {
+                telegram_bot.send_message(n, c);
+            }
+            //            thread::spawn(move || {}).join();
         }
 
         // ждем timeout в секундах для следующего обращения
