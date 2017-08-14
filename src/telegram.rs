@@ -35,7 +35,7 @@ impl TelegramBotClient {
         chart_ids
     }
 
-    pub fn send_message(&mut self, news: News, chat_id: u64) {
+    pub fn send_message(&mut self, news: News, chat_id: i64) {
         let msg_url = format!(
             "/sendMessage?chat_id={}&text={}&parse_mode=Markdown",
             chat_id,
