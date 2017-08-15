@@ -43,11 +43,11 @@ fn main() {
         for c in saved_charts {
             let sending_news = news.clone();
             let mut bot = telegram::TelegramBotClient::new(&cfg);
-            let _ = thread::spawn(move || {
+            thread::spawn(move || {
                 for n in sending_news {
                     bot.send_message(n, c);
                 }
-            }).join();
+            });
         }
 
         // ждем timeout в секундах для следующего обращения
